@@ -64,7 +64,6 @@ implementation {
       		//Ignor messages from Project 1
             //dbg(GENERAL_CHANNEL, "Packet Received\n");
       	 	//dbg(GENERAL_CHANNEL, "%d\n", myMsg -> protocol);
-           // dbg(GENERAL_CHANNEL, "Package Payload: %s\n", myMsg->payload);
       	 }
          
          else if (myMsg->dest == 0) {
