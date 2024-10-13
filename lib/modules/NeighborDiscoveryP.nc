@@ -37,6 +37,7 @@ implementation {
         packet->src = TOS_NODE_ID;
         packet->protocol = PROTOCOL_PINGREPLY;
 
+        bool result;
         // Handle the return value of Sender.send
         error_t result = call Sender.send(*packet, AM_BROADCAST_ADDR);
         if (result != SUCCESS) {
