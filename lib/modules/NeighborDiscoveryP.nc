@@ -25,14 +25,14 @@ implementation {
     // Start neighbor discovery with a periodic timer
     command error_t NeighborDiscovery.start() {
         call Timer.startPeriodic(500 + (uint16_t)(call Random.rand16() % 500));  // Periodic timer with random offset
-        dbg(NEIGHBOR_CHANNEL, "Node %d: Began Neighbor Discovery\n", TOS_NODE_ID);
+        dbg(GENERAL_CHANNEL, "Node %d: Began Neighbor Discovery\n", TOS_NODE_ID);
         return SUCCESS;
     }
 
     // Process incoming discovery packets
     command void NeighborDiscovery.discover(pack* packet) {
         if (packet->TTL > 0 && packet->protocol == PROTOCOL_PING) {
-            dbg(NEIGHBOR_CHANNEL, "PING Neighbor Discovery\n");
+            dbg(GENERAL_CHANNEL, "PING Neighbor Discovery\n");
             packet->TTL -= 1;
             packet->src = TOS_NODE_ID;
             packet->protocol = PROTOCOL_PINGREPLY;
@@ -40,7 +40,7 @@ implementation {
            
         }
         else if (packet->protocol == PROTOCOL_PINGREPLY && packet->dest == 0) {
-            dbg(NEIGHBOR_CHANNEL, "PING REPLY Neighbor Discovery, Confirmed neighbor %d\n", packet->src);
+            dbg(GENERAL_CHANNEL, "PING REPLY Neighbor Discovery, Confirmed neighbor %d\n", packet->src);
             if (!call NeighborTable.contains(packet->src)) {
                 call NeighborTable.insert(packet->src, NODETIMETOLIVE);
                 // Notify Link State Routing
@@ -66,7 +66,7 @@ implementation {
 
             // If TTL expired, remove the neighbor
             if (call NeighborTable.get(neighbors[i]) == 0) {
-                dbg(NEIGHBOR_CHANNEL, "Deleted Neighbor %d (TTL expired)\n", neighbors[i]);
+                dbg(GENERAL_CHANNEL, "Deleted Neighbor %d (TTL expired)\n", neighbors[i]);
                 call NeighborTable.remove(neighbors[i]);
                 call LinkStateRouting.handleNeighborLost(neighbors[i]);  // Notify Link State Routing of lost neighbor
             } else {
@@ -106,14 +106,14 @@ implementation {
         uint32_t* neighbors = call NeighborTable.getKeys();
         uint16_t numNeighbors = call NeighborTable.size();
 
-        dbg(NEIGHBOR_CHANNEL, "Node %d has the following neighbors:\n", TOS_NODE_ID);
+        dbg(GENERAL_CHANNEL, "Node %d has the following neighbors:\n", TOS_NODE_ID);
 
         if (numNeighbors == 0) {
-            dbg(NEIGHBOR_CHANNEL, "\tNo neighbors found.\n");
+            dbg(GENERAL_CHANNEL, "\tNo neighbors found.\n");
         } else {
             for (i = 0; i < numNeighbors; i++) {
                 if (neighbors[i] != 0) {
-                    dbg(NEIGHBOR_CHANNEL, "\tNeighbor: %d\n", neighbors[i]);
+                    dbg(GENERAL_CHANNEL, "\tNeighbor: %d\n", neighbors[i]);
                 }
             }
         }
