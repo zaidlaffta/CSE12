@@ -40,8 +40,8 @@ implementation {
 
       call NeighborDiscovery.start();
     
-      call LinkStateRouting.start();    
-      dbg(GENERAL_CHANNEL, "Calling Link State Routing \n");
+      //call LinkStateRouting.start();    
+      //dbg(GENERAL_CHANNEL, "Calling Link State Routing \n");
 
    }
 
