@@ -19,8 +19,8 @@ module Node{
 
    uses interface SplitControl as AMControl;
    uses interface Receive;
-   //uses interface Transport;
-   //uses interface TransportApp;
+   uses interface Transport;
+   uses interface TransportApp;
 
    uses interface SimpleSend as Sender;
 
