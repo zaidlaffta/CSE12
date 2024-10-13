@@ -71,8 +71,9 @@ implementation {
     // Send Ping
     command void LinkStateRouting.ping(uint16_t destination, uint8_t *payload) {
         makePack(&routePack, TOS_NODE_ID, destination, 0, PROTOCOL_PING, 0, payload, PACKET_MAX_PAYLOAD_SIZE);
-        dbg(GENERAL_CHANNEL, "PING from %d to %d\n", TOS_NODE_ID, destination);
+        dbg(GENERAL_CHANNEL, "PING for LSA from %d to %d\n", TOS_NODE_ID, destination);
         call LinkStateRouting.routePacket(&routePack);
+
     }
 
     // Route packet
@@ -81,7 +82,7 @@ implementation {
 
         if (myMsg->dest == TOS_NODE_ID) {
             if (myMsg->protocol == PROTOCOL_PING) {
-                dbg(GENERAL_CHANNEL, "PING reached destination %d!\n", TOS_NODE_ID);
+                dbg(GENERAL_CHANNEL, "Packet routed via LINK STATE ROUTING and reached destination %d!\n", TOS_NODE_ID);
                 makePack(&routePack, myMsg->dest, myMsg->src, 0, PROTOCOL_PINGREPLY, 0, (uint8_t *)myMsg->payload, PACKET_MAX_PAYLOAD_SIZE);
                 call LinkStateRouting.routePacket(&routePack);
             } else if (myMsg->protocol == PROTOCOL_PINGREPLY) {
