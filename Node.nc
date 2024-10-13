@@ -60,7 +60,7 @@ implementation {
       if(len==sizeof(pack)){
       	 pack* myMsg = (pack*) payload;
       	 // Don't print messages from neighbor probe packets or DV packets or TCP packets
-      	 if( strcmp( (char*)(myMsg->payload), "NeighborProbing") && (myMsg->protocol) != PROTOCOL_DV && myMsg->protocol != PROTOCOL_TCP && myMsg->protocol != PROTOCOL_LS && myMsg->protocol != PROTOCOL_PING && myMsg->protocol != PROTOCOL_PINGREPLY) {
+      	 if( strcmp( (char*)(myMsg->payload), "NeighborProbing") && (myMsg->protocol) && myMsg->protocol != PROTOCOL_LS && myMsg->protocol != PROTOCOL_PING && myMsg->protocol != PROTOCOL_PINGREPLY) {
       		dbg(GENERAL_CHANNEL, "Packet Received\n");
       	 	//dbg(GENERAL_CHANNEL, "%d\n", myMsg -> protocol);
             dbg(GENERAL_CHANNEL, "Package Payload: %s\n", myMsg->payload);
