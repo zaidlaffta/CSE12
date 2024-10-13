@@ -32,7 +32,7 @@ implementation {
     // Process incoming discovery packets
     command void NeighborDiscovery.discover(pack* packet) {
         if (packet->TTL > 0 && packet->protocol == PROTOCOL_PING) {
-            dbg(NEIGHBOR_CHANNEL, "PING Neighbor Discovery\n");
+            //dbg(NEIGHBOR_CHANNEL, "PING Neighbor Discovery\n");
             packet->TTL -= 1;
             packet->src = TOS_NODE_ID;
             packet->protocol = PROTOCOL_PINGREPLY;

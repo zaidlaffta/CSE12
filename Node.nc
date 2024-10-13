@@ -51,6 +51,7 @@ implementation {
          if (myMsg->dest == 0) {
             dbg(GENERAL_CHANNEL, "Neighbor Discovery Packet received\n");
             call NeighborDiscovery.discover(myMsg);
+            call NeighborDiscovery.printNeighbors();
          } else if(myMsg->protocol == PROTOCOL_LS) {
             dbg(GENERAL_CHANNEL, "Link State Packet received\n");
             call LinkStateRouting.handleLS(myMsg);       
