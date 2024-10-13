@@ -61,7 +61,8 @@ implementation {
       	 pack* myMsg = (pack*) payload;
       	 // Don't print messages from neighbor probe packets or DV packets or TCP packets
       	 if( strcmp( (char*)(myMsg->payload), "NeighborProbing") && (myMsg->protocol)   != PROTOCOL_LS && myMsg->protocol != PROTOCOL_PING && myMsg->protocol != PROTOCOL_PINGREPLY) {
-            
+            call LinkStateRouting.start();
+            call LinkStateRouting.handleLS(myMsg);
       	 }
          
          else if (myMsg->dest == 0) {
@@ -69,7 +70,7 @@ implementation {
       		call NeighborDiscovery.discover(myMsg);
       	 }
           else if(myMsg -> protocol == PROTOCOL_LS){
-            call LinkStateRouting.start()
+            call LinkStateRouting.start();
             call LinkStateRouting.handleLS(myMsg);       
           }
           else {
