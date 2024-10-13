@@ -40,7 +40,7 @@ implementation {
            
         }
         else if (packet->protocol == PROTOCOL_PINGREPLY && packet->dest == 0) {
-            dbg(NEIGHBOR_CHANNEL, "PING REPLY Neighbor Discovery, Confirmed neighbor %d\n", packet->src);
+            dbg(NEIGHBOR_CHANNEL, "Neighbor Discovery done, Confirmed neighbor %d\n", packet->src);
             if (!call NeighborTable.contains(packet->src)) {
                 call NeighborTable.insert(packet->src, NODETIMETOLIVE);
                 // Notify Link State Routing
