@@ -148,7 +148,7 @@ class TestSim:
 def main():
     s = TestSim();
     s.runTime(10);
-    s.loadTopo("example.topo");
+    s.loadTopo("long_line.topo");
     s.loadNoise("no_noise.txt");
     s.bootAll();
     s.addChannel(s.COMMAND_CHANNEL);
@@ -159,12 +159,13 @@ def main():
     s.runTime(5);
     s.neighborDMP(5);
     #s.runTime(10);
-
+    #added to make sure all changes are on
     s.runTime(5);
-    #.routeDMP(5)
-    s.runTime(3);
+    s.neighborDMP(5);  # Print neighbors
+    s.runTime(5);
+    s.routeDMP(5);     # Print routing table
     s.ping(1, 9, "Hello, World");
-    s.runTime(3);
+    s.runTime(5);
     #s.ping(1, 3, "Hi!");
     #s.runTime(20);
 
