@@ -106,14 +106,14 @@ implementation {
         uint32_t* neighbors = call NeighborTable.getKeys();
         uint16_t numNeighbors = call NeighborTable.size();
 
-        dbg(NEIGHBOR_CHANNEL, "Node %d has the following neighbors:\n", TOS_NODE_ID);
+        dbg(GENERAL_CHANNEL), "Node %d has the following neighbors:\n", TOS_NODE_ID);
 
         if (numNeighbors == 0) {
-            dbg(NEIGHBOR_CHANNEL, "\tNo neighbors found.\n");
+            dbg(GENERAL_CHANNEL, "\tNo neighbors found.\n");
         } else {
             for (i = 0; i < numNeighbors; i++) {
                 if (neighbors[i] != 0) {
-                    dbg(NEIGHBOR_CHANNEL, "\tNeighbor: %d\n", neighbors[i]);
+                    dbg(GENERAL_CHANNEL, "\tNeighbor: %d\n", neighbors[i]);
                 }
             }
         }
