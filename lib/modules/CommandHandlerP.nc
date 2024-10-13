@@ -78,11 +78,7 @@ implementation{
                 signal CommandHandler.setTestServer();
                 break;
 
-            case CMD_CLIENT_CLOSE:
-                dbg(COMMAND_CHANNEL, "Command Type: Closing Client\n");
-                signal CommandHandler.setClientClose();
-                break;
-
+            
             default:
                 dbg(COMMAND_CHANNEL, "CMD_ERROR: \"%d\" does not match any known commands.\n", msg->id);
                 break;
