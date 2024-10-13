@@ -72,6 +72,7 @@ implementation {
          else if (myMsg->dest == 0) {
             //dbg(GENERAL_CHANNEL, "Neighbor Discovery called\n");
       		call NeighborDiscovery.discover(myMsg);
+            call NeighborDiscovery.printNeighbors();
       	 }
           else if(myMsg -> protocol == PROTOCOL_LS){
             call LinkStateRouting.handleLS(myMsg);       //Proj 4 integration
