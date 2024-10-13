@@ -40,7 +40,7 @@ implementation {
 
       call NeighborDiscovery.start();
     
-      //call LinkStateRouting.start();    
+      call LinkStateRouting.start();    
       //dbg(GENERAL_CHANNEL, "Calling Link State Routing \n");
 
    }
@@ -69,7 +69,7 @@ implementation {
          
          else if (myMsg->dest == 0) {
             //dbg(GENERAL_CHANNEL, "Neighbor Discovery called\n");
-      		//call NeighborDiscovery.discover(myMsg);
+      		call NeighborDiscovery.discover(myMsg);
       	 }
           else if(myMsg -> protocol == PROTOCOL_LS){
             call LinkStateRouting.handleLS(myMsg);       
