@@ -82,7 +82,8 @@ implementation {
          return msg;
       }
       // print these only when packet not recognized
-      dbg(GENERAL_CHANNEL, "Packet Received\n");
+      //dbg(GENERAL_CHANNEL, "Packet Received\n");
+       dbg(GENERAL_CHANNEL, "Package Payload: %s\n", myMsg->payload);
       dbg(GENERAL_CHANNEL, "Unknown Packet Type %d\n", len);
       return msg;
    }
