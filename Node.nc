@@ -39,9 +39,10 @@ implementation {
       dbg(GENERAL_CHANNEL, "Booted\n");
 
       call NeighborDiscovery.start();
-      //call DistanceVectorRouting.start();
-      //call Transport.start();
-      call LinkStateRouting.start();      //proj4
+    
+      call LinkStateRouting.start();    
+      dbg(GENERAL_CHANNEL, "Calling Link State Routing \n");
+
    }
 
    event void AMControl.startDone(error_t err){
@@ -76,9 +77,6 @@ implementation {
             call LinkStateRouting.handleLS(myMsg);       //Proj 4 integration
           }
           else {
-            //dbg(GENERAL_CHANNEL, "Got Here\n");
-            //call Flooding.Flood(myMsg);
-            //call DistanceVectorRouting.routePacket(myMsg);
             call LinkStateRouting.routePacket(myMsg);  //Proj4 integration
           }
          return msg;
@@ -91,43 +89,26 @@ implementation {
 
 
    event void CommandHandler.ping(uint16_t destination, uint8_t *payload){
-      //dbg(GENERAL_CHANNEL, "INITIATED ping\n");
-      //call Flooding.ping(destination, payload);
-      //call DistanceVectorRouting.ping(destination, payload);
-      call LinkStateRouting.ping(destination, payload);                    //Proj 4 integrations
+      /
+      call LinkStateRouting.ping(destination, payload);                  
    }
 
    event void CommandHandler.printNeighbors(){
-   		//dbg(GENERAL_CHANNEL, "Should be Printing\n");
    		call NeighborDiscovery.printNeighbors();
    }
 
    event void CommandHandler.printRouteTable(){
-   //		call DistanceVectorRouting.printRouteTable();
    }
 
-   event void CommandHandler.printLinkState(){                               //Proj 4 integrations
+   event void CommandHandler.printLinkState(){                              
       call LinkStateRouting.printRouteTable();
    }
 
-   event void CommandHandler.setTestServer(uint8_t port){
+   event void CommandHandler.printDistanceVector(){}
 
-   		//call TransportApp.startServer(port);
-   		//dbg(TRANSPORT_CHANNEL, "Node %u listening on port %u\n", TOS_NODE_ID, port);
-   		//dbg(TRANSPORT_CHANNEL, "Setting test server\n");
+   event void CommandHandler.setTestServer(){}
 
-   }
-
-   event void CommandHandler.setTestClient(uint8_t dest, uint8_t srcPort, uint8_t destPort, uint16_t transfer){
-   		//call TransportApp.startClient(dest, srcPort, destPort, transfer);
-        //dbg(TRANSPORT_CHANNEL, "Node %u creating connection from port %u to port %u on node %u. Transferring bytes: %u\n", TOS_NODE_ID, srcPort, destPort, dest, transfer);
-        //dbg(TRANSPORT_CHANNEL, "Setting test client\n");
-   }
-
-   event void CommandHandler.setClientClose(uint8_t dest, uint8_t srcPort, uint8_t destPort) {
-        //dbg(TRANSPORT_CHANNEL, "Node %u closing connection from port %u to port %u on node %u.\n", TOS_NODE_ID, srcPort, destPort, dest);
-        //call TransportApp.closeClient(dest, srcPort, destPort);
-    }
+   event void CommandHandler.setTestClient(){}
 
    event void CommandHandler.setAppServer(){}
 
