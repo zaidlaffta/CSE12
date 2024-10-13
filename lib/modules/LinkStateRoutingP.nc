@@ -48,7 +48,7 @@ implementation {
     void djikstra();
 
     command error_t LinkStateRouting.start() {        // Initialize routing table and neighbor state structures// Start one-shot
-        dbg(ROUTING_CHANNEL, "Link State Routing Started on node %u!\n", TOS_NODE_ID);
+        dbg(GENERAL_CHANNEL, "Link State Routing Started on node %u!\n", TOS_NODE_ID);
         initilizeRoutingTable();
         call LSRTimer.startOneShot(40000);
    }
@@ -58,7 +58,7 @@ implementation {
             call LSRTimer.startPeriodic(30000 + (uint16_t) (call Random.rand16()%5000));
         } else {
             // Send flooding packet w/neighbor list
-            //dbg(ROUTING_CHANNEL, "sending flooding packet w neighbor list");
+            //dbg(GENERAL_CHANNEL, "sending flooding packet w neighbor list");
 
             sendLSP(0);
         }
@@ -66,7 +66,7 @@ implementation {
 
     command void LinkStateRouting.ping(uint16_t destination, uint8_t *payload) {
         makePack(&routePack, TOS_NODE_ID, destination, 0, PROTOCOL_PING, 0, payload, PACKET_MAX_PAYLOAD_SIZE);
-        dbg(ROUTING_CHANNEL, "PING FROM %d TO %d\n", TOS_NODE_ID, destination);
+        dbg(GENERAL_CHANNEL, "PING FROM %d TO %d\n", TOS_NODE_ID, destination);
         call LinkStateRouting.routePacket(&routePack);
     }    
 
@@ -74,20 +74,20 @@ implementation {
         // Look up value in table and forward
         uint8_t nextHop;
         if(myMsg->dest == TOS_NODE_ID && myMsg->protocol == PROTOCOL_PING) {
-            dbg(ROUTING_CHANNEL, "PING Packet has reached destination %d!!!\n", TOS_NODE_ID);
+            dbg(GENERAL_CHANNEL, "PING Packet has reached destination %d!!!\n", TOS_NODE_ID);
             makePack(&routePack, myMsg->dest, myMsg->src, 0, PROTOCOL_PINGREPLY, 0,(uint8_t *) myMsg->payload, PACKET_MAX_PAYLOAD_SIZE);
             call LinkStateRouting.routePacket(&routePack);
             return;
         } else if(myMsg->dest == TOS_NODE_ID && myMsg->protocol == PROTOCOL_PINGREPLY) {
-            dbg(ROUTING_CHANNEL, "PING_REPLY Packet has reached destination %d!!!\n", TOS_NODE_ID);
+            dbg(GENERAL_CHANNEL, "PING_REPLY Packet has reached destination %d!!!\n", TOS_NODE_ID);
             return;
         }
         if(routingTable[myMsg->dest].cost < LS_MAX_COST) {
             nextHop = routingTable[myMsg->dest].nextHop;
-            dbg(ROUTING_CHANNEL, "Node %d routing packet through %d\n", TOS_NODE_ID, nextHop);
+            dbg(GENERAL_CHANNEL, "Node %d routing packet through %d\n", TOS_NODE_ID, nextHop);
             call Sender.send(*myMsg, nextHop);
         } else {
-            dbg(ROUTING_CHANNEL, "No route to destination. Dropping packet...\n");
+            dbg(GENERAL_CHANNEL, "No route to destination. Dropping packet...\n");
         }
     }
 
@@ -107,7 +107,7 @@ implementation {
     }
 
     command void LinkStateRouting.handleNeighborLost(uint16_t lostNeighbor) {
-        dbg(ROUTING_CHANNEL, "Neighbor lost %u\n", lostNeighbor);
+        dbg(GENERAL_CHANNEL, "Neighbor lost %u\n", lostNeighbor);
         if(linkState[TOS_NODE_ID][lostNeighbor] != LS_MAX_COST) {
             linkState[TOS_NODE_ID][lostNeighbor] = LS_MAX_COST;
             linkState[lostNeighbor][TOS_NODE_ID] = LS_MAX_COST;
@@ -132,10 +132,10 @@ implementation {
 
     command void LinkStateRouting.printRouteTable() {
         uint16_t i;
-        dbg(ROUTING_CHANNEL, "DEST  HOP  COST\n");
+        dbg(GENERAL_CHANNEL, "DEST  HOP  COST\n");
         for(i = 1; i < LS_MAX_ROUTES; i++) {
             if(routingTable[i].cost != LS_MAX_COST)
-                dbg(ROUTING_CHANNEL, "%4d%5d%6d\n", i, routingTable[i].nextHop, routingTable[i].cost);
+                dbg(GENERAL_CHANNEL, "%4d%5d%6d\n", i, routingTable[i].nextHop, routingTable[i].cost);
         }
     }
 
@@ -195,7 +195,7 @@ implementation {
         i = 0;
         // If neighbor lost -> send out infinite cost
         if(lostNeighbor != 0) {
-            dbg(ROUTING_CHANNEL, "Sending out lost neighbor %u\n", lostNeighbor);
+            dbg(GENERAL_CHANNEL, "Sending out lost neighbor %u\n", lostNeighbor);
             linkStatePayload[counter].neighbor = lostNeighbor;
             linkStatePayload[counter].cost = LS_MAX_COST;
             i++;
@@ -209,7 +209,7 @@ implementation {
             if(counter == 10 || i == neighborsListSize-1) {
                 // Send LSP to each neighbor                
                 makePack(&routePack, TOS_NODE_ID, 0, LS_TTL, PROTOCOL_LS, sequenceNum++, &linkStatePayload, sizeof(linkStatePayload));
-                //dbg(ROUTING_CHANNEL, "sending LS packet\n");
+                //dbg(GENERAL_CHANNEL, "sending LS packet\n");
 
                 call Sender.send(routePack, AM_BROADCAST_ADDR);
                 // Zero the array
