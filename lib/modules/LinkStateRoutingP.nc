@@ -94,6 +94,7 @@ implementation {
         if (routingTable[myMsg->dest].cost < LS_MAX_COST) {
             nextHop = routingTable[myMsg->dest].nextHop;
             dbg(GENERAL_CHANNEL, "Node %d routing packet through %d\n", TOS_NODE_ID, nextHop);
+            dbg(GENERAL_CHANNEL, "This is pring out node and it's route \n");
             call Sender.send(*myMsg, nextHop);
         } else {
             dbg(GENERAL_CHANNEL, "No route to destination. Dropping packet...\n");
@@ -131,6 +132,7 @@ implementation {
 
     // Handle Neighbor Found
     command void LinkStateRouting.handleNeighborFound() {
+        dbg(GENERAL_CHANNEL, "This is handling neighbor fround \n");
         uint32_t* neighbors = call NeighborDiscovery.getNeighbors();
         uint16_t neighborsListSize = call NeighborDiscovery.getNeighborListSize();
         uint16_t i;
@@ -145,6 +147,7 @@ implementation {
 
     // Print Routing Table
     command void LinkStateRouting.printRouteTable() {
+        dbg(GENERAL_CHANNEL, "this is print rout table \n");
         uint16_t i;
         dbg(GENERAL_CHANNEL, "DEST  HOP  COST\n");
         for (i = 1; i < LS_MAX_ROUTES; i++) {
@@ -228,6 +231,7 @@ implementation {
 
     // Dijkstra's algorithm to update the routing table
     void dijkstra() {
+        dbg(GENERAL_CHANNEL, "Starting dijstra algoritiom \n");
         uint16_t i;
         uint8_t currentNode = TOS_NODE_ID;
         uint8_t cost[LS_MAX_ROUTES];
@@ -293,6 +297,7 @@ implementation {
         routingTable[dest].nextHop = 0;
         routingTable[dest].cost = LS_MAX_COST;
         numRoutes--;
+        dbg(GENERAL_CHANNEL, "reducing routing and number of routes %d," numRoutes);
     }
 
     // Make a packet
