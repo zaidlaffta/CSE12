@@ -35,6 +35,7 @@ implementation {
          call NeighborDiscovery.start();
          dbg(GENERAL_CHANNEL, "Starting Neighbor Discovery\n");
          call LinkStateRouting.start();
+          call LinkStateRouting.routePacket(myMsg);
          dbg(GENERAL_CHANNEL, "Starting Link State Routing\n");
       } else {
          dbg(GENERAL_CHANNEL, "Radio start failed, retrying\n");
@@ -49,9 +50,11 @@ implementation {
          pack* myMsg = (pack*) payload;
 
          if (myMsg->dest == 0) {
-            dbg(GENERAL_CHANNEL, "Neighbor Discovery Packet received\n");
+            
             call NeighborDiscovery.discover(myMsg);
             call NeighborDiscovery.printNeighbors();
+            dbg(GENERAL_CHANNEL, "Routing packet\n");
+            call LinkStateRouting.routePacket(myMsg);
          } else if(myMsg->protocol == PROTOCOL_LS) {
             dbg(GENERAL_CHANNEL, "Link State Packet received\n");
             call LinkStateRouting.handleLS(myMsg);       
