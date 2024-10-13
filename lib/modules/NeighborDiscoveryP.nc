@@ -37,12 +37,7 @@ implementation {
         packet->src = TOS_NODE_ID;
         packet->protocol = PROTOCOL_PINGREPLY;
 
-        bool result;
-        // Handle the return value of Sender.send
-        error_t result = call Sender.send(*packet, AM_BROADCAST_ADDR);
-        if (result != SUCCESS) {
-            dbg(GENERAL_CHANNEL, "Failed to send PING REPLY. Error code: %d\n", result);
-        }
+        
     }
     else if (packet->protocol == PROTOCOL_PINGREPLY && packet->dest == 0) {
         dbg(NEIGHBOR_CHANNEL, "PING REPLY Neighbor Discovery, Confirmed neighbor %d\n", packet->src);
