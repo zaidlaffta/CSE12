@@ -37,10 +37,7 @@ implementation {
       call AMControl.start();
 
       dbg(GENERAL_CHANNEL, "Booted\n");
-
-      call NeighborDiscovery.start();
-    
-      call LinkStateRouting.start();    
+  
       //dbg(GENERAL_CHANNEL, "Calling Link State Routing \n");
 
    }

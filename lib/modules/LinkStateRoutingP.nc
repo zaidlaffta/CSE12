@@ -103,6 +103,8 @@ implementation {
 
     // Handle Link-State packet
     command void LinkStateRouting.handleLS(pack* myMsg) {
+        dbg(GENERAL_CHANNEL, "Handling Link State Packet at node %d\n", TOS_NODE_ID);
+
         if (myMsg->src == TOS_NODE_ID || call PacketsReceived.containsVal(myMsg->src, myMsg->seq)) {
             return;
         } else {
@@ -147,6 +149,7 @@ implementation {
 
     // Print Routing Table
     command void LinkStateRouting.printRouteTable() {
+        dbg(GENERAL_CHANNEL, "Printing routing table for node %d\n", TOS_NODE_ID);
         dbg(GENERAL_CHANNEL, "this is print rout table \n");
         uint16_t i;
         dbg(GENERAL_CHANNEL, "DEST  HOP  COST\n");
