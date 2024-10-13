@@ -19,17 +19,12 @@ module Node{
 
    uses interface SplitControl as AMControl;
    uses interface Receive;
-   uses interface Transport;
-   uses interface TransportApp;
-
    uses interface SimpleSend as Sender;
-
    uses interface CommandHandler;
    uses interface Flooding as Flooding;
-   //uses interface DistanceVectorRouting as DistanceVectorRouting;
    uses interface NeighborDiscovery as NeighborDiscovery;
 
-   uses interface LinkStateRouting as LinkStateRouting;   //Proj 4 integrations
+   uses interface LinkStateRouting as LinkStateRouting; 
 }
 
 implementation {
