@@ -30,29 +30,32 @@ implementation {
     }
 
     // Process incoming discovery packets
-    command void NeighborDiscovery.discover(pack* packet) {
+   command void NeighborDiscovery.discover(pack* packet) {
     if (packet->TTL > 0 && packet->protocol == PROTOCOL_PING) {
         dbg(NEIGHBOR_CHANNEL, "PING Neighbor Discovery\n");
         packet->TTL -= 1;
         packet->src = TOS_NODE_ID;
         packet->protocol = PROTOCOL_PINGREPLY;
-        call Sender.send(*packet, AM_BROADCAST_ADDR);
+
+        // Handle the return value of Sender.send
+        error_t result = call Sender.send(*packet, AM_BROADCAST_ADDR);
+        if (result != SUCCESS) {
+            dbg(GENERAL_CHANNEL, "Failed to send PING REPLY. Error code: %d\n", result);
+        }
     }
     else if (packet->protocol == PROTOCOL_PINGREPLY && packet->dest == 0) {
         dbg(NEIGHBOR_CHANNEL, "PING REPLY Neighbor Discovery, Confirmed neighbor %d\n", packet->src);
         if (!call NeighborTable.contains(packet->src)) {
             call NeighborTable.insert(packet->src, NODETIMETOLIVE);
-            // Added condition to prevent recursive or repeated neighbor handling
-            dbg(NEIGHBOR_CHANNEL, "Node %d: Neighbor %d discovered. Updating Link State Routing...\n", TOS_NODE_ID, packet->src);
-            if (call LinkStateRouting.handleNeighborFound()) {
-                dbg(NEIGHBOR_CHANNEL, "Neighbor %d handled by Link State Routing.\n", packet->src);
-            }
+            // Notify Link State Routing
+            call LinkStateRouting.handleNeighborFound();
         } else {
-            // Refresh TTL for known neighbor
+            // Refresh TTL if neighbor is already known
             call NeighborTable.insert(packet->src, NODETIMETOLIVE);
         }
     }
 }
+
 
     // Timer event to periodically send PINGs and prune inactive neighbors
     event void Timer.fired() {
